@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# Copyright 2025 The Helium Authors
+# Copyright 2025 The Radium Authors
 # You can use, redistribute, and/or modify this source code under
 # the terms of the GPL-3.0 license that can be found in the LICENSE file.
 
@@ -22,8 +22,8 @@ import platform
 from pathlib import Path
 import shutil
 
-sys.path.insert(0, str(Path(__file__).resolve().parent / 'helium-chromium' / 'utils'))
-import helium_version
+sys.path.insert(0, str(Path(__file__).resolve().parent / 'radium-chromium' / 'utils'))
+import radium_version
 import filescfg
 from _common import ENCODING, get_chromium_version
 sys.path.pop(0)
@@ -60,12 +60,12 @@ def main():
 
     build_outputs = Path('build/src/out/Default')
 
-    version_parts = helium_version.get_version_parts(_ROOT_DIR / 'helium-chromium', _ROOT_DIR)
-    version = f"{version_parts['HELIUM_MAJOR']}.{version_parts['HELIUM_MINOR']}." + \
-              f"{version_parts['HELIUM_PATCH']}.{version_parts['HELIUM_PLATFORM']}"
+    version_parts = radium_version.get_version_parts(_ROOT_DIR / 'radium-chromium', _ROOT_DIR)
+    version = f"{version_parts['RADIUM_MAJOR']}.{version_parts['RADIUM_MINOR']}." + \
+              f"{version_parts['RADIUM_PATCH']}.{version_parts['RADIUM_PLATFORM']}"
 
     shutil.copyfile('build/src/out/Default/mini_installer.exe',
-        'build/helium_{}_{}-installer.exe'.format(
+        'build/radium_{}_{}-installer.exe'.format(
             version, _get_target_cpu(build_outputs)))
 
     timestamp = None
@@ -75,7 +75,7 @@ def main():
     except FileNotFoundError:
         pass
 
-    output = Path('build/helium_{}_{}-windows.zip'.format(
+    output = Path('build/radium_{}_{}-windows.zip'.format(
         version, _get_target_cpu(build_outputs)))
 
     excluded_files = set([

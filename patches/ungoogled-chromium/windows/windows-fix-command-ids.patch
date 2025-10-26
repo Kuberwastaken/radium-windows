@@ -20,7 +20,7 @@
  #endif
  
 @@ -95,7 +95,7 @@
- // Helium commands
+ // Radium commands
  #define IDC_COPY_OR_INSPECT_SHORTCUT    34080
  
 -#if BUILDFLAG(IS_CHROMEOS)

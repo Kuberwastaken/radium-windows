@@ -26,7 +26,7 @@ outputs:
   artifact_id:
     description: id of the build dir artifact
   version:
-    description: version of the helium release we just built
+    description: version of the radium release we just built
 
 runs:
   using: 'node16'

@@ -25,10 +25,10 @@ async function run() {
 
     if (from_artifact && !same_runner) {
         const artifactInfo = await artifact.getArtifact(artifactName);
-        await artifact.downloadArtifact(artifactInfo.artifact.id, {path: 'C:\\helium-windows\\build'});
-        await exec.exec('7z', ['x', 'C:\\helium-windows\\build\\artifacts.zip',
-            '-oC:\\helium-windows\\build', '-y']);
-        await io.rmRF('C:\\helium-windows\\build\\artifacts.zip');
+        await artifact.downloadArtifact(artifactInfo.artifact.id, {path: 'C:\\radium-windows\\build'});
+        await exec.exec('7z', ['x', 'C:\\radium-windows\\build\\artifacts.zip',
+            '-oC:\\radium-windows\\build', '-y']);
+        await io.rmRF('C:\\radium-windows\\build\\artifacts.zip');
     }
 
     const args = ['build.py', '--ci', String(started_at)]
@@ -37,7 +37,7 @@ async function run() {
 
     if (gen_installer) {
         const patterns = ['*.7z', 'mini_installer.*', '*.ex_'];
-        const prefix = 'C:\\helium-windows\\build\\src\\out\\Default';
+        const prefix = 'C:\\radium-windows\\build\\src\\out\\Default';
         const globber = await glob.create(patterns.map(pattern => path.join(prefix, pattern)).join('\n'));
 
         const binaries = [
@@ -52,11 +52,11 @@ async function run() {
     }
 
     await exec.exec('python', ['-m', 'pip', 'install', 'httplib2==0.22.0', 'Pillow'], {
-        cwd: 'C:\\helium-windows',
+        cwd: 'C:\\radium-windows',
         ignoreReturnCode: true
     });
     const retCode = await exec.exec('python', args, {
-        cwd: 'C:\\helium-windows',
+        cwd: 'C:\\radium-windows',
         ignoreReturnCode: true
     });
 
@@ -71,7 +71,7 @@ async function run() {
 
         const patterns = ['chrome*.exe', 'notification_helper.exe', 'setup.exe', 'mini_installer.exe', '*.dll'];
 
-        const prefix = 'C:\\helium-windows\\build\\src\\out\\Default';
+        const prefix = 'C:\\radium-windows\\build\\src\\out\\Default';
         const globber = await glob.create(patterns.map(pattern => path.join(prefix, pattern)).join('\n'));
 
         const binaries = await globber.glob();
@@ -81,10 +81,10 @@ async function run() {
     }
 
     if (do_package) {
-        const globber = await glob.create('C:\\helium-windows\\build\\helium*',
+        const globber = await glob.create('C:\\radium-windows\\build\\radium*',
             {matchDirectories: false});
         let packageList = await globber.glob();
-        const finalArtifactName = arm ? 'helium-arm64' : 'helium-x86_64';
+        const finalArtifactName = arm ? 'radium-arm64' : 'radium-x86_64';
         for (let i = 0; i < 5; ++i) {
             try {
                 await artifact.deleteArtifact(finalArtifactName);
@@ -93,7 +93,7 @@ async function run() {
             }
             try {
                 await artifact.uploadArtifact(finalArtifactName, packageList,
-                    'C:\\helium-windows\\build', { compressionLevel: 0 });
+                    'C:\\radium-windows\\build', { compressionLevel: 0 });
                 break;
             } catch (e) {
                 console.error(`Upload artifact failed: ${e}`);
@@ -103,9 +103,9 @@ async function run() {
         }
 
         const { exitCode, stdout } = await exec.getExecOutput('python', [
-            'helium-chromium\\utils\\helium_version.py',
+            'radium-chromium\\utils\\radium_version.py',
             '--print',
-            '--tree', 'helium-chromium',
+            '--tree', 'radium-chromium',
             '--platform-tree', '.'
         ]);
 
@@ -114,8 +114,8 @@ async function run() {
     }
 
     if (!gen_installer && !make_sign_artifact) {
-        await exec.exec('7z', ['a', '-tzip', 'C:\\helium-windows\\artifacts.zip',
-            'C:\\helium-windows\\build\\src', '-mx=3', '-mtc=on'], {ignoreReturnCode: true});
+        await exec.exec('7z', ['a', '-tzip', 'C:\\radium-windows\\artifacts.zip',
+            'C:\\radium-windows\\build\\src', '-mx=3', '-mtc=on'], {ignoreReturnCode: true});
         for (let i = 0; i < 5; ++i) {
             try {
                 await artifact.deleteArtifact(artifactName);
@@ -123,8 +123,8 @@ async function run() {
                 // ignored
             }
             try {
-                await artifact.uploadArtifact(artifactName, ['C:\\helium-windows\\artifacts.zip'],
-                    'C:\\helium-windows', { compressionLevel: 0 });
+                await artifact.uploadArtifact(artifactName, ['C:\\radium-windows\\artifacts.zip'],
+                    'C:\\radium-windows', { compressionLevel: 0 });
                 break;
             } catch (e) {
                 console.error(`Upload artifact failed: ${e}`);

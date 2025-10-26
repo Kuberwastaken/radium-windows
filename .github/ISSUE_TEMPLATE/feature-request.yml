@@ -14,7 +14,7 @@ body:
         to read that and thus your request will be closed.
 
         If your request is for a feature that would apply to all platforms, and
-        not just Windows, please submit it to the generic "helium" repo instead.
+        not just Windows, please submit it to the generic "radium" repo instead.
   - type: input
     id: description
     attributes:

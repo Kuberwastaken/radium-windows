@@ -1,5 +1,5 @@
 name: Bug Report
-description: Report a bug building or running Helium
+description: Report a bug building or running Radium
 labels: ["bug"]
 title: "[Bug]: "
 body:
@@ -11,12 +11,13 @@ body:
         interacting with the entire organization.
 
         If you suspect your bug might apply to all platforms and not just Windows,
-        please submit it to the relevant shared "helium" repository instead.
+        please submit it to the relevant shared "radium" repository instead.
   - type: input
     id: version
     attributes:
       label: Version
-      description: Can be copied from helium://settings/help
+      description: Can be copied from radium://settings/help
+      placeholder: ex. 133.0.6943.8 r1
     validations:
       required: true
   - type: checkboxes
@@ -25,7 +26,8 @@ body:
       options:
         - label: I have tried reproducing this issue in Chrome and it could not be reproduced there
         - label: I have tried reproducing this issue in ungoogled-chromium and it could not be reproduced there
-        - label: I have tried reproducing this issue in Helium with a new and empty profile using `--user-data-dir` command line argument and it could not be reproduced there
+        - label: I have tried reproducing this issue in Radium with a new and empty profile using `--user-data-dir` command line argument and it could not be reproduced there
+          required: true
   - type: input
     id: description
     attributes:

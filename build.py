@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# Copyright 2025 The Helium Authors
+# Copyright 2025 The Radium Authors
 # You can use, redistribute, and/or modify this source code under
 # the terms of the GPL-3.0 license that can be found in the LICENSE file.
 
@@ -23,11 +23,11 @@ import subprocess
 import ctypes
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent / 'helium-chromium' / 'utils'))
+sys.path.insert(0, str(Path(__file__).resolve().parent / 'radium-chromium' / 'utils'))
 import downloads
 import domain_substitution
 import name_substitution
-import helium_version
+import radium_version
 import generate_resources
 import replace_resources
 import prune_binaries
@@ -172,7 +172,7 @@ def main():
         if args.tarball:
             # Download chromium tarball
             get_logger().info('Downloading chromium tarball...')
-            download_info = downloads.DownloadInfo([_ROOT_DIR / 'helium-chromium' / 'downloads.ini'])
+            download_info = downloads.DownloadInfo([_ROOT_DIR / 'radium-chromium' / 'downloads.ini'])
             downloads.retrieve_downloads(download_info, downloads_cache, None, True, args.disable_ssl_verification)
             try:
                 downloads.check_downloads(download_info, downloads_cache, None)
@@ -185,7 +185,7 @@ def main():
             downloads.unpack_downloads(download_info, downloads_cache, None, source_tree, extractors)
         else:
             # Clone sources
-            subprocess.run([sys.executable, str(Path('helium-chromium', 'utils', 'clone.py')), '-o', 'build\\src', '-p', 'win-arm64' if args.arm else 'win64'], check=True)
+            subprocess.run([sys.executable, str(Path('radium-chromium', 'utils', 'clone.py')), '-o', 'build\\src', '-p', 'win-arm64' if args.arm else 'win64'], check=True)
 
         # Retrieve windows downloads
         get_logger().info('Downloading required files...')
@@ -199,7 +199,7 @@ def main():
 
         # Retrieve extras
         get_logger().info('Downloading generic extras...')
-        extras_info = downloads.DownloadInfo([_ROOT_DIR / 'helium-chromium' / 'extras.ini'])
+        extras_info = downloads.DownloadInfo([_ROOT_DIR / 'radium-chromium' / 'extras.ini'])
         downloads.retrieve_downloads(extras_info, downloads_cache, None, True, args.disable_ssl_verification)
         try:
             downloads.check_downloads(extras_info, downloads_cache, None)
@@ -211,7 +211,7 @@ def main():
 
 
         # Prune binaries
-        pruning_list = _ROOT_DIR / 'helium-chromium' / 'pruning.list'
+        pruning_list = _ROOT_DIR / 'radium-chromium' / 'pruning.list'
         unremovable_files = prune_binaries.prune_files(
             source_tree,
             pruning_list.read_text(encoding=ENCODING).splitlines()
@@ -236,7 +236,7 @@ def main():
             # Apply patches
             # First, ungoogled-chromium-patches
             patches.apply_patches(
-                patches.generate_patches_from_series(_ROOT_DIR / 'helium-chromium' / 'patches', resolve=True),
+                patches.generate_patches_from_series(_ROOT_DIR / 'radium-chromium' / 'patches', resolve=True),
                 source_tree,
                 patch_bin_path=(source_tree / _PATCH_BIN_RELPATH)
             )
@@ -248,9 +248,9 @@ def main():
             )
 
             # Substitute domains
-            domain_substitution_list = _ROOT_DIR / 'helium-chromium' / 'domain_substitution.list'
+            domain_substitution_list = _ROOT_DIR / 'radium-chromium' / 'domain_substitution.list'
             domain_substitution.apply_substitution(
-                _ROOT_DIR / 'helium-chromium' / 'domain_regex.list',
+                _ROOT_DIR / 'radium-chromium' / 'domain_regex.list',
                 domain_substitution_list,
                 source_tree,
                 None
@@ -266,12 +266,12 @@ def main():
             input()
 
         # Set version
-        version_parts = helium_version.get_version_parts(_ROOT_DIR / 'helium-chromium', _ROOT_DIR)
+        version_parts = radium_version.get_version_parts(_ROOT_DIR / 'radium-chromium', _ROOT_DIR)
         chrome_version_path = source_tree / "chrome" / "VERSION"
-        helium_version.check_existing_version(chrome_version_path)
+        radium_version.check_existing_version(chrome_version_path)
         with open(chrome_version_path, "a") as f:
             for name, version in version_parts.items():
-                helium_version.append_version(f, name, version)
+                radium_version.append_version(f, name, version)
 
         # Copy resources
         # First, generate and copy Windows-specific resources
@@ -286,15 +286,15 @@ def main():
             source_tree
         )
 
-        # Then common helium-chromium resources
+        # Then common radium-chromium resources
         generate_resources.generate_resources(
-            _ROOT_DIR / 'helium-chromium' / 'resources' / 'generate_resources.txt',
-            _ROOT_DIR / 'helium-chromium' / 'resources'
+            _ROOT_DIR / 'radium-chromium' / 'resources' / 'generate_resources.txt',
+            _ROOT_DIR / 'radium-chromium' / 'resources'
         )
 
         replace_resources.copy_resources(
-            _ROOT_DIR / 'helium-chromium' / 'resources' / 'helium_resources.txt',
-            _ROOT_DIR / 'helium-chromium' / 'resources',
+            _ROOT_DIR / 'radium-chromium' / 'resources' / 'radium_resources.txt',
+            _ROOT_DIR / 'radium-chromium' / 'resources',
             source_tree
         )
 
@@ -336,7 +336,7 @@ def main():
     if not args.ci or not (source_tree / 'out/Default').exists():
         # Output args.gn
         (source_tree / 'out/Default').mkdir(parents=True)
-        gn_flags = (_ROOT_DIR / 'helium-chromium' / 'flags.gn').read_text(encoding=ENCODING)
+        gn_flags = (_ROOT_DIR / 'radium-chromium' / 'flags.gn').read_text(encoding=ENCODING)
         gn_flags += '\n'
         windows_flags = (_ROOT_DIR / 'flags.windows.gn').read_text(encoding=ENCODING)
         if args.arm:

@@ -1,12 +1,12 @@
-# helium-windows
+# radium-windows
 
-Windows packaging for [Helium](https://github.com/imputnet/helium).
+Windows packaging for [Radium](https://github.com/kuberwastaken/radium).
 
 ## Credits
 
 This repo is based on
 [ungoogled-chromium-windows](https://github.com/ungoogled-software/ungoogled-chromium-windows),
-but is pretty heavily modified for Helium. Huge shout-out to everyone behind ungoogled-chromium,
+but is pretty heavily modified for Radium. Huge shout-out to everyone behind ungoogled-chromium,
 they made working with Chromium infinitely easier.
 
 ## Code signing policy
@@ -14,11 +14,11 @@ they made working with Chromium infinitely easier.
 Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by
 [SignPath Foundation](https://signpath.org/)
 
-Committers, reviewers and approvers: [@imputnet](https://github.com/orgs/imputnet/people)
+Committers, reviewers and approvers: [@kuberwastaken](https://github.com/kuberwastaken)
 
 ## License
 All code, patches, modified portions of imported code or patches, and
-any other content that is unique to Helium and not imported from other
+any other content that is unique to Radium and not imported from other
 repositories is licensed under GPL-3.0. See [LICENSE](LICENSE).
 
 Any content imported from other projects retains its original license (for
@@ -64,8 +64,8 @@ methods for older Windows versions.
 Run in `Developer Command Prompt for VS` (as administrator):
 
 ```cmd
-git clone --recurse-submodules https://github.com/imputnet/helium-windows.git
-cd helium-windows
+git clone --recurse-submodules https://github.com/kuberwastaken/radium-windows.git
+cd radium-windows
 # Replace TAG_OR_BRANCH_HERE with a tag or branch name
 git checkout --recurse-submodules TAG_OR_BRANCH_HERE
 python3 build.py
@@ -98,18 +98,18 @@ ln -s /usr/bin/vim /usr/bin/vi
 
 1. Start `Developer Command Prompt for VS` and `MSYS2 MSYS` shell and navigate to source folder
 	1. `Developer Command Prompt for VS`
-		* `cd c:\path\to\repo\helium-windows`
+		* `cd c:\path\to\repo\radium-windows`
 	1. `MSYS2 MSYS`
-		* `cd /path/to/repo/helium-windows`
+		* `cd /path/to/repo/radium-windows`
 		* You can use Git Bash to determine the path to this repo
 		* Or, you can find it yourself via `/<drive letter>/<path with forward slashes>`
 1. Clone sources
 	**`Developer Command Prompt for VS`**
-	* `python3 helium-chromium\utils\clone.py -o build\src`
+	* `python3 radium-chromium\utils\clone.py -o build\src`
 1. Check for rust version change (see below)
 1. Update pruning list
 	**`Developer Command Prompt for VS`**
-	* `python3 helium-chromium\devutils\update_lists.py -t build\src --domain-regex helium-chromium\domain_regex.list`
+	* `python3 radium-chromium\devutils\update_lists.py -t build\src --domain-regex radium-chromium\domain_regex.list`
 1. Update patches
 	**`MSYS2 MSYS`**
 	1. Setup patches and shell to update patches
@@ -120,7 +120,7 @@ ln -s /usr/bin/vim /usr/bin/vi
 	1. Use quilt to refresh patches. See ungoogled-chromium's [docs/developing.md](https://github.com/ungoogled-software/ungoogled-chromium/blob/master/docs/developing.md#updating-patches) section "Updating patches" for more details
 	1. Go back to repo root
 		* `cd ../..`
-	1. Remove all patches introduced by helium-chromium
+	1. Remove all patches introduced by radium-chromium
 		* `./devutils/update_patches.sh unmerge`
 	1. Sanity checking for consistency in series file
 		* `./devutils/check_patch_files.sh`
@@ -141,7 +141,7 @@ ln -s /usr/bin/vim /usr/bin/vi
 1. Check the [Git GitHub](https://github.com/git-for-windows/git/releases/) for the latest version of Git.
 	1. Get the SHA-256 checksum for `PortableGit-<version>-64-bit.7z.exe`.
 1. Check for commit hash changes of `src` submodule in `third_party/microsoft_dxheaders` (e.g. using GitHub `https://github.com/chromium/chromium/tree/<version>/third_party/microsoft_dxheaders`).
-	1. Replace `version` with the Chromium version in `helium-chromium/chromium_version.txt`.
+	1. Replace `version` with the Chromium version in `radium-chromium/chromium_version.txt`.
 1. Check the node version changes in `third_party/node/update_node_binaries` (e.g. using GitHub `https://github.com/chromium/chromium/tree/<version>/third_party/node/update_node_binaries`).
 	1. Download the "Standalone Binary" version from the [NodeJS website](https://nodejs.org/en/download).
 	1. Get the SHA-512 checksum using `sha512sum` in **`MSYS2 MSYS`**.
